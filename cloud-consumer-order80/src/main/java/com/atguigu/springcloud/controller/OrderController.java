@@ -4,6 +4,7 @@ import com.atguigu.springcloud.entities.CommonResult;
 import com.atguigu.springcloud.entities.Payment;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,8 +28,18 @@ public class OrderController {
     }
 
     @GetMapping("/consumer/payment/get/{id}")
-    public CommonResult<Payment> getPayment(@PathVariable("id") Long id)
-    {
+    public CommonResult<Payment> getPayment(@PathVariable("id") Long id) {
         return restTemplate.getForObject(PAYMENT_URL+"/payment/get/"+id,CommonResult.class);
+    }
+
+    @GetMapping("/consumer/payment/getEntity/{id}")
+    public CommonResult<Payment> getEntityPayment(@PathVariable("id") Long id) {
+        ResponseEntity<CommonResult> forEntity = restTemplate.getForEntity(PAYMENT_URL + "/payment/get/" + id, CommonResult.class);
+        if(forEntity.getStatusCode().is2xxSuccessful()){
+            log.info(forEntity.getStatusCode()+" "+forEntity.getHeaders());
+            return forEntity.getBody();
+        }else {
+            return new CommonResult<Payment>(444,"返回异常");
+        }
     }
 }
