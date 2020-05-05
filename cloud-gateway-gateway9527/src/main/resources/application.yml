@@ -22,8 +22,10 @@ spring:
           uri: lb://cloud-payment-service #匹配后提供服务的路由地址  3)
           predicates:
             - Path=/payment/lb/**         # 断言，路径相匹配的进行路由
-            #- After=2020-02-21T15:51:37.485+08:00[Asia/Shanghai]
-            #- Cookie=username,zzyy
+            #如果没在这个时间后，就会404，让我想到了抢券的那个
+            #可以每天19点开启，设置这个后就能无缝上线了
+            - After=2020-05-05T22:08:31.219+08:00[Asia/Shanghai]
+            - Cookie=username,zzyy
             #- Header=X-Request-Id, \d+  # 请求头要有X-Request-Id属性并且值为整数的正则表达式
 
 eureka:
